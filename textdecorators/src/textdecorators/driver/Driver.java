@@ -11,6 +11,7 @@ import textdecorators.MostFrequentWordDecorator;
 import textdecorators.SentenceDecorator;
 import textdecorators.SpellCheckDecorator;
 import textdecorators.util.FileProcessor;
+import textdecorators.util.MyLogger;
 import textdecorators.exceptions.InputFileNotExistsException;
 import textdecorators.exceptions.InputFileMatchException;
 
@@ -28,18 +29,24 @@ public class Driver {
 	 * @exception IOException On invalid input.
 	 * @exception InputFileNotExistsException On not finding input file where mentioned.
 	 * @exception InputFileMatchException when both input files have same name and path
+	 * @return void
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 
-		/*
+		/**
 		 * As the build.xml specifies the arguments as input,output or metrics, in case the
 		 * argument value is not given java takes the default value specified in
 		 * build.xml. To avoid that, below condition is used
 		 */
-		if ((args.length != 4) || (args[0].equals("${input}")) || (args[1].equals("${misspelled}")) || (args[2].equals("${keywords}")) || (args[3].equals("${output}"))) {
+		if ((args.length != 5) || (args[0].equals("${input}")) || (args[1].equals("${misspelled}")) || (args[2].equals("${keywords}")) || (args[3].equals("${output}")) || (args[3].equals("${debug}"))) {
 			System.err.printf("Error: Incorrect number of arguments. Program accepts %d arguments.", REQUIRED_NUMBER_OF_CMDLINE_ARGS);
 			System.exit(0);
 		}
+		MyLogger.getInstance().setDebugValue(Integer.parseInt(args[4]));
+		MyLogger.getInstance().writeMessage("Inside Driver Class", MyLogger.DebugLevel.DRIVER);
+		MyLogger.getInstance().writeMessage("obtaining input files from command line", MyLogger.DebugLevel.DRIVER);
+		MyLogger.getInstance().writeMessage("checking for validations", MyLogger.DebugLevel.DRIVER);
+
 		try {
 			//storing input file
 			String inputFilename = args[0];
@@ -66,21 +73,21 @@ public class Driver {
 				throw new InputFileMatchException("");
 			}
 
-
+			MyLogger.getInstance().writeMessage("creating an instance of InputDetails, passing the files", MyLogger.DebugLevel.DRIVER);
 			// creating an instance of InputDetails, passing the files
 			InputDetails inputD = new InputDetails(inputFilename, outputFilename);
 			// setting file processor in inputdetails class
 			inputD.setFileProcessor(fpinput);
 			//calling the method to store input data into structure
 			inputD.storeSentence();
-
+			MyLogger.getInstance().writeMessage("creating instances of decorators, pass instances to sequential decorators along", MyLogger.DebugLevel.DRIVER);
 			// creating instances of decorators, pass instances to sequential decorators along
 			AbstractTextDecorator sentenceDecorator = new SentenceDecorator(null, inputD);
 			// extra parameter to pass misspelled and keyword file
 			AbstractTextDecorator spellCheckDecorator = new SpellCheckDecorator(sentenceDecorator, inputD, fpmisspelled);
 			AbstractTextDecorator keywordDecorator = new KeywordDecorator(spellCheckDecorator, inputD, fpkeyword);
 			AbstractTextDecorator mostFreqWordDecorator = new MostFrequentWordDecorator(keywordDecorator, inputD);
-
+			MyLogger.getInstance().writeMessage("calling first decorator which initiates process", MyLogger.DebugLevel.DRIVER);
 			//calling first decorator which initiates process
 			mostFreqWordDecorator.processInputDetails();
 

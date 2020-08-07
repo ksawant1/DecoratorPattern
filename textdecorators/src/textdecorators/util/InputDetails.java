@@ -2,6 +2,7 @@ package textdecorators.util;
 import java.io.*;
 import java.util.ArrayList;
 import textdecorators.exceptions.InputFileEmptyException;
+import textdecorators.exceptions.SpecialCharacterException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.FileWriter;
@@ -45,10 +46,16 @@ public class InputDetails {
 
 	// method that calls poll using fileprocessor and stores it in an array list call resultant_sentence
 	public void storeSentence() throws IOException {
-
+		String pattern= "[^a-zA-Z0-9\\.,\\s]";
+		// Create a Pattern object
+		Pattern r = Pattern.compile(pattern);
 		try {
 
 			String line = fileP.poll();
+			Matcher m = r.matcher(line);
+			if (m.find( )) {
+				throw new SpecialCharacterException("");
+			}
 			if (line == null)
 				throw new InputFileEmptyException("");
 
@@ -67,10 +74,15 @@ public class InputDetails {
 		} catch (IOException ex) {
 			System.out.println("input invalid");
 		} catch (InputFileEmptyException e) {
-		System.out.println("input file is empty");
-		System.exit(0);
+			System.out.println("input file is empty");
+			System.exit(0);
+		}catch (SpecialCharacterException e) {
+				System.out.println("Characters in the input file do not belong to the set [a-zA-Z0-9\\.,\\s]");
+				System.exit(0);
 
-	}}
+			}
+
+	}
 
 	// mainly calls search() and returns element index if found in array list
 	public int updateinarray(String addon, String key) {

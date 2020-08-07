@@ -50,6 +50,7 @@
             <arg value="${misspelled}"/> <!-- Misspelled words file -->
             <arg value="${keywords}"/> <!-- Keywords file -->
             <arg value="${output}"/> <!-- output file -->
+            <arg value="${debug}"/> <!-- debug -->
 
 
         </java>

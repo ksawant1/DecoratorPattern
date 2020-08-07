@@ -1,6 +1,7 @@
 package textdecorators;
 import textdecorators.AbstractTextDecorator;
 import textdecorators.util.InputDetails;
+import textdecorators.util.MyLogger;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.lang.String;
@@ -22,17 +23,23 @@ public class MostFrequentWordDecorator extends AbstractTextDecorator {
 	public MostFrequentWordDecorator(AbstractTextDecorator atdIn, InputDetails idIn) {
 		atd = atdIn;
 		id = idIn;
+		MyLogger.getInstance().writeMessage("constructor for most frequent decorator", MyLogger.DebugLevel.CONSTRUCTOR);
+
 	}
 
 	// method to find most frequent word
 	public void processInputDetails() {
+		MyLogger.getInstance().writeMessage("inside MOST FREQUENT decorator class", MyLogger.DebugLevel.MOSTFREQUENTWORDSDECORATOR);
+		MyLogger.getInstance().writeMessage("gets the array list checks every word count", MyLogger.DebugLevel.MOSTFREQUENTWORDSDECORATOR);
+		MyLogger.getInstance().writeMessage("compares with maximum word count", MyLogger.DebugLevel.MOSTFREQUENTWORDSDECORATOR);
+
 		for (int i = 0; i < id.getResultant_sentence().size(); i++) {
 			count = 1;
-
 			//loops through the sentence list while comparing each words occurance by keeping a count
 			for (int j = i + 1; j < id.getResultant_sentence().size(); j++) {
 				if (id.getResultant_sentence().get(i).equalsIgnoreCase(id.getResultant_sentence().get(j))) {
 					count++;
+
 				}
 			}
 			// if we find a maximum count we know it's the most frequently occurring word
@@ -49,6 +56,7 @@ public class MostFrequentWordDecorator extends AbstractTextDecorator {
 			}
 			index = index + 1;
 		}
+		MyLogger.getInstance().writeMessage("adds decorators to most ocurring", MyLogger.DebugLevel.MOSTFREQUENTWORDSDECORATOR);
 		// loooping through the temporary list we add sentence decorators
 		for (int i : toloop) {
 			id.getResultant_sentence().add(i, "MOST_FREQUENT_");
@@ -56,6 +64,7 @@ public class MostFrequentWordDecorator extends AbstractTextDecorator {
 
 
 		}
+		MyLogger.getInstance().writeMessage("goes to next decorator", MyLogger.DebugLevel.MOSTFREQUENTWORDSDECORATOR);
 		// we move to the next in sequence decorator
 		if (null != atd) atd.processInputDetails();
 

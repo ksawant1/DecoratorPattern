@@ -4,6 +4,7 @@ import textdecorators.AbstractTextDecorator;
 import textdecorators.util.InputDetails;
 import textdecorators.util.FileProcessor;
 import textdecorators.exceptions.InputFileEmptyException;
+import textdecorators.util.MyLogger;
 
 import java.util.ArrayList;
 import java.io.IOException;
@@ -27,11 +28,15 @@ public class SpellCheckDecorator extends AbstractTextDecorator {
 		atd = atdIn;
 		id = idIn;
 		this.fileP = fileprocessor;
+		MyLogger.getInstance().writeMessage("constructor for spell check decorator", MyLogger.DebugLevel.CONSTRUCTOR);
+
 	}
 
 	//to find word and add decorator
 	public void processInputDetails() {
+		MyLogger.getInstance().writeMessage("inside spellcheck decorator class", MyLogger.DebugLevel.SPELLCHECKDECORATOR);
 		//reads the provided spell check file.txt and stores in temporary array
+		MyLogger.getInstance().writeMessage("reads the provided spell check file.txt and stores in temporary array", MyLogger.DebugLevel.SPELLCHECKDECORATOR);
 		try {
 			String line = fileP.poll();
 			if (line == null)
@@ -43,6 +48,7 @@ public class SpellCheckDecorator extends AbstractTextDecorator {
 				}
 				line = fileP.poll();
 			}
+			MyLogger.getInstance().writeMessage("finds all words that match and add decorators to arraylist", MyLogger.DebugLevel.SPELLCHECKDECORATOR);
 
 			// loops through the sentence array and finds all words that match adding the decorator
 			// comparison is case-insensitive
@@ -56,6 +62,8 @@ public class SpellCheckDecorator extends AbstractTextDecorator {
 					}
 				}
 			}
+			MyLogger.getInstance().writeMessage("calls next decorator", MyLogger.DebugLevel.SPELLCHECKDECORATOR);
+			//
 			// calls the next decorator in sequence
 			if (null != atd) {
 				atd.processInputDetails();
